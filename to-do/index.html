@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>To do</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Libre+Franklin:wght@400;500;600&display=swap">
+<style>
+/* Same world as the home page: one quiet column, Fraunces names, Libre Franklin body, rosa accent. */
+:root{--bg:#F4F3EF;--surface:#FFFFFF;--ink:#1D2129;--muted:#626872;--line:#DCDAD3;--accent:#B3125A;--accent-soft:#F6DCE7;--soon:#9A4A0B;
+  --f-display:"Fraunces",Georgia,serif;--f-body:"Libre Franklin",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
+@media (prefers-color-scheme: dark){:root{--bg:#14161A;--surface:#1C1F25;--ink:#ECEAE4;--muted:#A2A7AF;--line:#2E323A;--accent:#F0679F;--accent-soft:#3A1B2A;--soon:#F2A35F;color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+.wrap{max-width:640px;margin:0 auto;padding:clamp(28px,7vw,72px) 20px 64px}
+.back{color:var(--muted);font-size:14px;text-decoration:none}
+.back:hover{color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(44px,10vw,68px);line-height:1;margin:16px 0 0;letter-spacing:-.01em}
+.count{color:var(--muted);margin:12px 0 0;font-variant-numeric:tabular-nums}
+.bar{height:4px;background:var(--line);border-radius:2px;margin:14px 0 36px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:2px;transition:width .3s ease}
+section{margin-top:36px}
+h2{font-family:var(--f-display);font-weight:500;font-size:24px;margin:0 0 6px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+h2 small{font-family:var(--f-body);font-size:13px;color:var(--muted);font-weight:400;font-variant-numeric:tabular-nums}
+ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+li{border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:4px}
+li label{flex:1;display:grid;grid-template-columns:24px 1fr;gap:12px;padding:14px 0;cursor:pointer;min-width:0}
+li input{appearance:none;-webkit-appearance:none;width:22px;height:22px;margin:1px 0 0;border:2px solid var(--muted);border-radius:6px;background:var(--surface);cursor:pointer;display:grid;place-items:center}
+li input::after{content:"";width:6px;height:11px;border:solid var(--surface);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px);opacity:0}
+li input:checked{background:var(--accent);border-color:var(--accent)}
+li input:checked::after{opacity:1}
+li input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.task{font-weight:500;overflow-wrap:anywhere}
+.note{display:block;color:var(--muted);font-size:14px;font-weight:400;margin-top:2px}
+.due{display:inline-block;font-size:12px;font-weight:600;color:var(--soon);border:1.5px solid currentColor;border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px;white-space:nowrap}
+li.done .task{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+li.done .note,li.done .due{display:none}
+.del{flex:none;background:none;border:0;color:var(--muted);font:inherit;font-size:13px;padding:15px 4px 14px 10px;cursor:pointer}
+.del:hover,.del:focus-visible{color:var(--accent)}
+.del:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.hide-done li.done{display:none}
+.empty{color:var(--muted);font-size:14px;padding:14px 0;border-bottom:1px solid var(--line);display:none}
+.hide-done ul:not(:has(li:not(.done))) + .empty{display:block}
+form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:44px}
+form .row{display:grid;grid-template-columns:1fr 150px;gap:8px}
+@media (max-width:480px){form .row{grid-template-columns:1fr}}
+input[type=text],select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0;width:100%}
+input[type=text]:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+button.add{font:inherit;font-weight:600;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer;align-self:start}
+button.add:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.tools{display:flex;gap:20px;flex-wrap:wrap;margin-top:28px;font-size:14px}
+.tools button{background:none;border:0;padding:0;font:inherit;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.tools button:hover,.tools button:focus-visible{color:var(--accent)}
+footer{margin-top:36px;color:var(--muted);font-size:13px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="/">Puneeth &amp; Alaina</a>
+  <h1>To do</h1>
+  <p class="count" id="count" aria-live="polite"></p>
+  <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+
+  <div id="lists"></div>
+
+  <form id="addForm" autocomplete="off">
+    <div class="row">
+      <label class="sr" for="newTask">New task</label>
+      <input type="text" id="newTask" placeholder="Add a task" maxlength="140" required>
+      <label class="sr" for="newGroup">List</label>
+      <select id="newGroup"></select>
+    </div>
+    <button class="add" type="submit">Add</button>
+  </form>
+
+  <div class="tools">
+    <button type="button" id="toggleDone" aria-pressed="false">Hide completed</button>
+    <button type="button" id="clearDone">Remove completed</button>
+  </div>
+
+  <footer>Saved on this device. Checking something off here won't show up on another phone.</footer>
+</main>
+
+<script>
+(function () {
+  var KEY = 'pa-todo-v1';
+  var GROUPS = [
+    { id: 'week', name: 'This week' },
+    { id: 'travel', name: 'Travel to book' },
+    { id: 'wedding', name: 'Our wedding' },
+    { id: 'india', name: 'India trip' },
+    { id: 'later', name: 'Later' }
+  ];
+  var DEFAULTS = [
+    { id: 'pharmacy', g: 'week', t: 'Call the pharmacy', due: 'Mon' },
+    { id: 'deposit', g: 'week', t: 'Move $500 of direct deposit to Capital One checking', n: 'For the account bonus.', due: 'Mon' },
+    { id: 'xmas', g: 'travel', t: 'Book Christmas flights', n: 'Puneeth to DC, Alaina to Lexington.' },
+    { id: 'mexico', g: 'travel', t: 'Book Monterrey flights', n: 'Viva SAT to MTY Thu Dec 31, 8:00 PM. MTY to SAT Sun Jan 3, 5:40 PM.' },
+    { id: 'venue-sheet', g: 'wedding', t: 'Finish the venue spreadsheet' },
+    { id: 'venue-research', g: 'wedding', t: 'Finish researching venues' },
+    { id: 'agra', g: 'india', t: 'Book a driver for Agra, Tue Feb 9', n: 'Pickup at Delhi arrivals at 5:15 AM. Ask other guests about sharing.' },
+    { id: 'taj', g: 'india', t: 'Buy Taj Mahal tickets online', n: 'For Tuesday, Feb 9.' },
+    { id: 'evisa', g: 'india', t: 'India e-Visa', n: 'For anyone on a U.S. passport without an OCI card.' },
+    { id: 'pto', g: 'india', t: 'Request PTO for Feb 8–12', n: 'Check whether Presidents’ Day, Feb 15, is a holiday.' },
+    { id: 'latecheckout', g: 'india', t: 'Ask the Grand Hyatt Istanbul for a late checkout', n: 'The Delhi flight leaves at 8:45 PM.' },
+    { id: 'sat-ride', g: 'india', t: 'Arrange a ride to SAT, or parking', n: 'Feb 6 to Feb 13.' },
+    { id: 'confs', g: 'india', t: 'Add confirmation numbers to the India page' },
+    { id: 'europe', g: 'later', t: 'Set seats.aero alerts for Europe, summer 2027' },
+    { id: 'citi-aa', g: 'later', t: 'Decide on the Citi AA card' }
+  ];
+
+  function load() {
+    try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.items) return s; } catch (e) {}
+    return { items: DEFAULTS.map(function (d) { return Object.assign({ done: false }, d); }), hideDone: false };
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  var state = load();
+
+  var lists = document.getElementById('lists');
+  var groupSel = document.getElementById('newGroup');
+  GROUPS.forEach(function (g) {
+    var o = document.createElement('option'); o.value = g.id; o.textContent = g.name; groupSel.appendChild(o);
+  });
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function render() {
+    lists.textContent = '';
+    lists.classList.toggle('hide-done', state.hideDone);
+    GROUPS.forEach(function (g) {
+      var items = state.items.filter(function (i) { return i.g === g.id; });
+      if (!items.length) return;
+      var open = items.filter(function (i) { return !i.done; }).length;
+      var sec = el('section'); sec.setAttribute('aria-labelledby', 'h-' + g.id);
+      var h = el('h2'); h.id = 'h-' + g.id; h.appendChild(document.createTextNode(g.name));
+      h.appendChild(el('small', null, open ? open + ' left' : 'All done'));
+      sec.appendChild(h);
+      var ul = el('ul');
+      items.forEach(function (it) {
+        var li = el('li', it.done ? 'done' : '');
+        var lab = el('label');
+        var cb = el('input'); cb.type = 'checkbox'; cb.checked = it.done;
+        cb.addEventListener('change', function () { it.done = cb.checked; save(); render(); focusItem(it.id); });
+        var body = el('span');
+        var t = el('span', 'task', it.t);
+        if (it.due) t.appendChild(el('span', 'due', it.due));
+        body.appendChild(t);
+        if (it.n) body.appendChild(el('span', 'note', it.n));
+        lab.appendChild(cb); lab.appendChild(body);
+        li.appendChild(lab);
+        var del = el('button', 'del', 'Delete'); del.type = 'button';
+        del.setAttribute('aria-label', 'Delete “' + it.t + '”');
+        del.addEventListener('click', function () {
+          state.items = state.items.filter(function (x) { return x !== it; }); save(); render();
+        });
+        li.appendChild(del);
+        li.dataset.id = it.id;
+        ul.appendChild(li);
+      });
+      sec.appendChild(ul);
+      sec.appendChild(el('p', 'empty', 'Everything here is done.'));
+      lists.appendChild(sec);
+    });
+    var total = state.items.length, done = state.items.filter(function (i) { return i.done; }).length;
+    document.getElementById('count').textContent = total ? (total - done) + ' left of ' + total : 'Nothing on the list.';
+    document.getElementById('bar').style.width = total ? (done / total * 100) + '%' : '0';
+    var tb = document.getElementById('toggleDone');
+    tb.textContent = state.hideDone ? 'Show completed' : 'Hide completed';
+    tb.setAttribute('aria-pressed', String(state.hideDone));
+  }
+  function focusItem(id) {
+    var cb = lists.querySelector('li[data-id="' + id + '"] input');
+    if (cb && cb.offsetParent) cb.focus();
+  }
+
+  document.getElementById('addForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var input = document.getElementById('newTask');
+    var t = input.value.trim(); if (!t) return;
+    state.items.push({ id: 'c' + Date.now(), g: groupSel.value, t: t, done: false });
+    save(); render(); input.value = ''; input.focus();
+  });
+  document.getElementById('toggleDone').addEventListener('click', function () { state.hideDone = !state.hideDone; save(); render(); });
+  document.getElementById('clearDone').addEventListener('click', function () {
+    var n = state.items.filter(function (i) { return i.done; }).length;
+    if (!n || !confirm('Remove ' + n + ' completed ' + (n === 1 ? 'task' : 'tasks') + '?')) return;
+    state.items = state.items.filter(function (i) { return !i.done; }); save(); render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
